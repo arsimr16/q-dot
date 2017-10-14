@@ -98,27 +98,38 @@ app.get('/restaurants', (req, res) => {
   }
 });
 
+app.get('*/menu/order/:queueId', (req, res) => {
+  dbQueueMenu.getMenuForQueue(req.params.queueId)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch(err => {
+      res.send(418);
+      console.log('Error getting queue/menu relationship', err);
+    });
+});
+
 app.post('*/menu/order/:queueId/:menuId', (req, res) => {
   dbQueueMenu.addMenuForQueue(req.params.queueId, req.params.menuId)
     .then((results) => {
       res.send(results);
     })
     .catch(err => {
+      res.send(418);
       console.log('Error adding queue/menu relationship', err);
-    })
-  // res.send('hi');
+    });
 });
 
 app.delete('*/menu/order/:queueId', (req, res) => {
   let menuId = req.query ? req.query.menuId : null;
   dbQueueMenu.removeItems(req.params.queueId, menuId)
     .then((results) => {
-      res.send(results);
+      res.send(200);
     })
     .catch(err => {
       console.log('Error adding queue/menu relationship', err);
-    })
-  // res.send('hi');
+      res.send(418);
+    });
 });
 
 app.get('*/menu/:restaurantId', (req, res) => {
@@ -174,6 +185,7 @@ app.post('*/menu/:restaurantId', (req, res) => {
       })
       .catch(err => {
         console.log('error adding menu item', err);
+        res.sendStatus(418);
       });
   } else {
     res.sendStatus(418);

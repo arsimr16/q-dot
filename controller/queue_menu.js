@@ -5,6 +5,15 @@ const addMenuForQueue = (queueId, menuId) => {
   return db.QueueMenu.findOrCreate({ where: { menuId: menuId, queueId: queueId } })
 };
 
+const getMenuForQueue = (queueId) => {
+  return db.Menu.findAll({
+    include: {
+      model: db.Queue,
+      where: { id: queueId}
+    }
+  })
+}
+
 const removeItems = (queueId, menuId) => {
   if (menuId) {
     return db.QueueMenu.destroy({
@@ -19,5 +28,6 @@ const removeItems = (queueId, menuId) => {
 
 module.exports = {
   addMenuForQueue,
-  removeItems
+  removeItems,
+  getMenuForQueue
 };

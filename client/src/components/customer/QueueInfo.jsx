@@ -17,7 +17,9 @@ class QueueInfo extends React.Component {
         wait: '',
         queueInFrontCount: ''
       },
-      ready: false
+      ready: false,
+      modalRestaurant: undefined,
+      modalOrdered: undefined
     };
     // socket initialize
     this.socket = io();
@@ -64,6 +66,78 @@ class QueueInfo extends React.Component {
     }
   }
 
+  addOrder(menuItem) {
+    $.ajax({
+      url: `./menu/order/${this.state.currentCustomer.queueId}/${menuItem.id}`,
+      method: 'POST',
+      success: (res) => {
+        let newMenu = this.state.modalOrdered;
+        newMenu.push(menuItem);
+        this.setState({
+          modalMenu: newMenu
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  removeOrder(menuItem, index) {
+    $.ajax({
+      url: `./menu/order/${this.state.currentCustomer.queueId}?menuId=${menuItem.id}`,
+      method: 'DELETE',
+      success: (res) => {
+        let newMenu = this.state.modalOrdered;
+        newMenu.splice(index, 1);
+        this.setState({
+          modalMenu: newMenu
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  showModal(menu) {
+    this.setState({
+      modalRestaurant: menu
+    }, () => {
+      $('#customer-menu-order').modal('toggle');
+    });
+  }
+
+  getOrders(menu) {
+    $.ajax({
+      url: `/menu/order/${this.state.currentCustomer.queueId}`,
+      method: 'GET',
+      success: (orders) => {
+        console.log('orders', orders);
+        this.setState({
+          modalOrdered: orders
+        }, () => {
+          this.showModal.call(this, menu);
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  getMenu(restaurantId) {
+    $.ajax({
+      url: `./menu/${restaurantId}`,
+      success: (menu) => {
+        this.getOrders.call(this, menu);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
   render() {
     return (
       <div className="customer-queue-info-container">
@@ -77,9 +151,12 @@ class QueueInfo extends React.Component {
               <h6>your approximate wait time is:</h6>
               <span className="wait-time-indicator">{this.state.currentCustomer.wait}</span>
               <p className="groups-in-front-indicator">There are currently {this.state.currentCustomer.queueInFrontCount} groups in front of you</p>
-              <button></button>
+              <button className="getMenuBtn" onClick={this.getMenu.bind(this, this.state.currentCustomer.restaurant.id)}>Menu</button>
             </div>
         }
+
+        { this.state.modalRestaurant ? <MenuModal order removeOrder={this.removeOrder.bind(this)} addOrder={this.addOrder.bind(this)} modalOrdered={this.state.modalOrdered} modalRestaurant={this.state.modalRestaurant}/> : '' }
+
       </div>
     );
   }
