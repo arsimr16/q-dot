@@ -41,6 +41,12 @@ class RestaurantCard extends React.Component {
               {this.props.restaurant.address}
             </div>
             <div className="card-content">
+              <span className="rating">rating: {this.props.restaurant.rating}</span>
+            </div>
+            <div className="card-content">
+              <span className="reviewCount">number of reviews: {this.props.restaurant.reviewCount}</span>
+            </div>
+            <div className="card-content">
               <span className="queue-number">groups in queue: {this.props.restaurant.queues.length} </span>
               <span className="wait-time">wait time: {this.props.restaurant.total_wait - this.props.restaurant.average_wait} mins</span>
             </div>
