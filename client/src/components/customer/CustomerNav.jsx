@@ -6,7 +6,8 @@ class CustomerNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rewards: 0
+      reservationRewards: 0,
+      queueRewards: 0
     };
   }
 
@@ -20,7 +21,10 @@ class CustomerNav extends React.Component {
       url: '/rewards',
       success: (data) => {
         console.log(data);
-        this.setState({ rewards: data.rewardQueues });
+        this.setState({
+          reservationRewards: data.reservationCount,
+          queueRewards: data.queueCount
+        });
       },
       failure: (error) => {
         console.log('failed to grab restaurant data', error);
@@ -79,7 +83,7 @@ class CustomerNav extends React.Component {
                 <h2 className="modal-title">Rewards</h2>
               </div>
               <div className="modal-body">
-                { !this.state.rewards
+                { !this.state.reservationRewards && !this.state.queueRewards
                   ? <h2>No rewards available, bruh!</h2>
                   : <table id="reward-table" className="bordered responsive-table centered">
                     <thead>
@@ -91,7 +95,7 @@ class CustomerNav extends React.Component {
                     </thead>
 
                     <tbody>
-                      { this.state.rewards >= 5
+                      { this.state.reservationRewards >= 5
                         ? <tr>
                           <td><i className="material-icons">merge_type</i></td>
                           <td>Queue Reservation</td>
@@ -106,7 +110,7 @@ class CustomerNav extends React.Component {
                           </td>
                         </tr> : null
                       }
-                      { this.state.rewards >= 10
+                      { this.state.queueRewards >= 10
                         ? <tr>
                           <td><i className="material-icons">local_dining</i></td>
                           <td>Free Appetizer</td>
