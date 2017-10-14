@@ -554,6 +554,7 @@ app.get('/rewards', (req, res) => {
       })
       .then(customer => dbQuery.getCustomerQueueHistory(customer.id))
       .then(queues => {
+        console.log(queues.length);
         const rewardQueues = {
           reservationCount: queues.length - rewardInfo.reservationClaim,
           queueCount: queues.length - rewardInfo.queueClaim

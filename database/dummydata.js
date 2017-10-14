@@ -127,11 +127,16 @@ const addCustomer = () => {
 };
 
 const addRewardData = () => {
-  return db.Reward.findOrCreate({
+  db.Reward.findOrCreate({
     where: {
       managerId: 2
     }
-  });
+  })
+    .then(db.Reward.findOrCreate({
+      where: {
+        managerId: 3
+      }
+    }));
 };
 
 const rewardQueueOptions = {
@@ -187,24 +192,25 @@ const dropDB = () => {
     .then(() => db.Restaurant.sync({force: true}))
     .then(() => addRestaurants(() => {
       db.Manager.sync({force: true})
-      .then(() => addManager())
-      .then(() => db.ManagerAudit.sync({force: true}))
-      .then(() => db.Customer.sync({force: true}))
-      .then(() => db.Menu.sync({force:true}))
-      .then(() => db.Queue.sync({force: true}))
-      .then(() => addToQueue())
-      .then(() => db.QueueMenu.sync({force: true}))
-      .then(() => addOrders())
-      .then(() => db.Announcement.sync({force: true}))
-      .then(() => addAnnouncements())
-      .then(() => addMenus())
-      .then(() => addCustomer())
-      .then(() => db.Reward.sync({force: true}))
-      .then(() => addRewardData())
-      .then(() => console.log('Done syncing dummy data'))
-      .catch(err => {
-        console.log('error syncing dummy data', err);
-      })
+        .then(() => addManager())
+        .then(() => db.ManagerAudit.sync({force: true}))
+        .then(() => db.Customer.sync({force: true}))
+        .then(() => db.Menu.sync({force: true}))
+        .then(() => db.Queue.sync({force: true}))
+        .then(() => addToQueue())
+        .then(() => db.QueueMenu.sync({force: true}))
+        .then(() => addOrders())
+        .then(() => db.Announcement.sync({force: true}))
+        .then(() => addAnnouncements())
+        .then(() => addMenus())
+        .then(() => addCustomer())
+        .then(() => db.Reward.sync({force: true}))
+        .then(() => addRewardData())
+        .then(() => addRewardQueues())
+        .then(() => console.log('Done syncing dummy data'))
+        .catch(err => {
+          console.log('error syncing dummy data', err);
+        });
     }))
     .catch(err => {
       console.log('error syncing dummy data', err);
