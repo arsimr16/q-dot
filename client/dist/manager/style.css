@@ -31,6 +31,9 @@ body {
   margin-top: 0;
   height: 400px;
   background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+  background-size: cover;
+  background-position: center;
 }
 
 #grand-title {
@@ -72,16 +75,22 @@ h2 {
 }
 
 .entry-button {
-  margin-top: 20px;
-  margin-left: 60px;
-  margin-right: 30px;
+  margin: 10px;
 }
 
 .customer-list-entry {
+  margin-left: 1px;
   border: 1px solid gray;
   width: 100%;
   max-width: 100%;
   border-radius: 10px;
+}
+
+button {
+  border: none;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  background-image: none !important;
 }
 
 .customer-list-entry:hover {

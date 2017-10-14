@@ -3,9 +3,10 @@ import CustomerNav from './CustomerNav.jsx';
 import CustomerBanner from './CustomerBanner.jsx';
 import SelectedRestaurant from './SelectedRestaurant.jsx';
 import RestaurantCard from './RestaurantCard.jsx';
-import MenuListItem from './MenuListItem.jsx'
 import GMap from './GMap.jsx';
-import AnnouncementModal from './AnnouncementModal.jsx';
+import AnnouncementModal from './Modals/AnnouncementModal.jsx';
+import MenuModal from './Modals/MenuModal.jsx';
+import MapModal from './Modals/MapModal.jsx';
 import $ from 'jquery';
 import scriptLoader from 'react-async-script-loader';
 const { api_key } = require('../../../../server/credentials/googleAPI.js');
@@ -151,95 +152,9 @@ class CustomerHome extends React.Component {
 
         {this.state.currentRestaurant.announcements && <AnnouncementModal announcements={this.state.currentRestaurant.announcements}/>}
 
-          { this.state.modalRestaurant
-            ? <div style={{background: 'none', boxShadow: 'none'}} id="customer-menu" className="modal fade" role="dialog">
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-                    <h2 className="modal-title">Menu</h2>
-                  </div>
-                  <div className="modal-body">
-                    <ul className="menu">
-                      {this.state.modalRestaurant.map((menuItem, index) => {
-                        return <MenuListItem menuItem={menuItem} key={index}/>
-                      })}
-                    </ul>
-                  </div>
-                  <div className="modal-footer">
-                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            : []
-          }
+        { this.state.modalRestaurant && <MenuModal modalRestaurant={this.state.modalRestaurant}/> }
 
-          { this.state.modalMap ?
-            <div style={{background: 'none', boxShadow: 'none'}} id="rest-map" className="modal fade" role="dialog">
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-                    <h2 className="modal-title">{this.state.modalMap.name}</h2>
-                  </div>
-                  <div className="modal-body">
-                    <div style={{width: '250px', height: '250px', margin: '15px auto'}}>
-                      <GMap
-                        you={!!this.state.location}
-                        isMarkerShown
-                        location={this.state.location}
-                        restaurant={{latitude: this.state.modalMap.latitude, longitude: this.state.modalMap.longitude}}
-                        apiKey={api_key}
-                      />
-                    </div>
-                    <div style={{width: '100%'}} className="text-center transportation">
-                      <i onClick={this.travelTime.bind(this, 'driving')} className="fa fa-car fa-2x" aria-hidden="true"></i>
-                      <i onClick={this.travelTime.bind(this, 'transit')} className="fa fa-subway fa-2x" aria-hidden="true"></i>
-                      <i onClick={this.travelTime.bind(this, 'walking')} className="fa fa-male fa-2x" aria-hidden="true"></i>
-                      <i onClick={this.travelTime.bind(this, 'bicycling')} className="fa fa-bicycle fa-2x" aria-hidden="true"></i>
-                    </div>
-                    {!!this.state.travelTime ?
-                      <div>
-                        <div style={{width: '100%'}} className="text-center">
-                          <div className="travelInfo">Distance: {this.state.travelTime.distance.text}</div>
-                          <div className="travelInfo">Duration: {this.state.travelTime.duration.text}</div>
-                        </div>
-                        <ul className="menu">
-                          <li><div className="col-xs-11">
-                            <i className="fa fa-map-marker" aria-hidden="true"></i> {this.state.travelTime.start_address}
-                          </div></li>
-                          {this.state.travelTime.steps.map((step, index) => {
-                            return (
-                              <li key={index}>
-                                <h4 className="col-xs-9">{step.distance.text}</h4>
-                                <div className="col-xs-3 text-right price">
-                                  {step.duration.text}
-                                </div>
-                                <div className="col-xs-11" dangerouslySetInnerHTML={{__html: step.html_instructions}}>
-                                </div>
-                              </li>
-                            );
-                          })}
-                          <li><div className="col-xs-11">
-                            <i className="fa fa-map-marker" aria-hidden="true"></i> {this.state.travelTime.end_address}
-                          </div></li>
-                        </ul>
-                      </div>
-                      :
-                      <div style={{width: '100%'}} className="text-center">
-                        <div className="travelInfo">(Note: You must enable location services to see your travel time)</div>
-                      </div>
-                    }
-                  </div>
-                  <div className="modal-footer">
-                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            : '' }
+        { this.state.modalMap && <MapModal apikey={api_key} modalMap={this.state.modalMap} location={this.state.location} travelTime={this.state.travelTime} getTravelTime={this.travelTime.bind(this)}/> }
       </div>
     );
   }

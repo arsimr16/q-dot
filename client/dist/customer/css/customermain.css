@@ -9994,14 +9994,14 @@ nav li a {
   left: 50%;
 }
 
-.customer-home button {
+.customer-home button, .getMenuBtn {
   font-size: 14px;
   text-transform: uppercase;
   font-weight: normal;
   color: white;
   background: skyblue;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 10px;
   z-index: 5;
   margin-bottom: 0 !important;
