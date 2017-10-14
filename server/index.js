@@ -554,7 +554,12 @@ app.get('/rewards', (req, res) => {
       })
       .then(customer => dbQuery.getCustomerQueueHistory(customer.id))
       .then(queues => {
-        res.send({ rewardQueues: queues.length} );
+        const rewardQueues = {
+          reservationCount: queues.length - rewardInfo.reservationClaim,
+          queueCount: queues.length - rewardInfo.queueClaim
+        };
+
+        res.send(rewardQueues);
       });
   }
 });
