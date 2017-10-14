@@ -165,3 +165,13 @@ h3 {
 .modal-backdrop {
   z-index: 0;
 }
+
+.updateImage {
+  font-size: 16px;
+  background: white;
+  position: absolute;
+  left: 0;
+  padding: 10px;
+  margin-top: 320px;
+  text-transform: uppercase;
+}
