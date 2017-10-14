@@ -127,7 +127,7 @@ app.delete('*/menu/order/:queueId', (req, res) => {
       res.send(200);
     })
     .catch(err => {
-      console.log('Error adding queue/menu relationship', err);
+      // console.log('Error adding queue/menu relationship', err);
       res.send(418);
     });
 });

@@ -203,8 +203,8 @@ Manager.hasOne(Reward);
 Reward.belongsTo(Manager);
 
 // Relationship between Queue & Menu
-Queue.belongsToMany(Menu, {through: QueueMenu, foreignKey: 'queueId', constraints: false});
-Menu.belongsToMany(Queue, {through: QueueMenu, foreignKey: 'menuId', constraints: false});
+Queue.belongsToMany(Menu, {through: { model: QueueMenu, unique: false }, foreignKey: 'queueId', constraints: false});
+Menu.belongsToMany(Queue, {through: { model: QueueMenu, unique: false }, foreignKey: 'menuId', constraints: false});
 
 Restaurant.sync()
   .then(() => Manager.sync())

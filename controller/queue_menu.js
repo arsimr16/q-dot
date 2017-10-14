@@ -2,7 +2,7 @@ const db = require('../database/index.js');
 const { ne, lt, gt } = db.Sequelize.Op;
 
 const addMenuForQueue = (queueId, menuId) => {
-  return db.QueueMenu.findOrCreate({ where: { menuId: menuId, queueId: queueId } })
+  return db.QueueMenu.create({ menuId: menuId, queueId: queueId })
 };
 
 const getMenuForQueue = (queueId) => {

@@ -4,6 +4,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 require('webpack-jquery-ui/sortable');
 import AddToQueue from './AddToQueue.jsx';
+import OrdersModal from './Modals/OrdersModal.jsx';
 
 class CustomerList extends React.Component {
 
@@ -12,15 +13,30 @@ class CustomerList extends React.Component {
 
     this.state = {
       modalQueue: undefined,
-      newQueue: []
+      newQueue: [],
+      modalOrders: undefined
     };
   }
 
   showModal(queue) {
-    this.setState({ modalQueue: queue });
-    // everytime the state changed, modal needs to initialize.
-    // so put the modal toggle in the next runloop of modal initialize
-    setTimeout(() => $('#remove-warning').modal('toggle'), 0);
+    this.setState({ modalQueue: queue }, () => {
+      $('#remove-warning').modal('toggle')
+    });
+  }
+
+  showOrders(queueId) {
+    $.ajax({
+      url: `/menu/order/${queueId}`,
+      method: 'GET',
+      success: (orders) => {
+        this.setState({ modalOrders: orders }, () => {
+          $('#manager-orders-modal').modal('toggle')
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   componentDidMount() {
@@ -40,6 +56,7 @@ class CustomerList extends React.Component {
   }
 
   componentDidUpdate() {
+        console.log(this.props.queues);
     if (this.state.newQueue) {
       this.props.updateQueue(this.state.newQueue);
     }
@@ -49,8 +66,8 @@ class CustomerList extends React.Component {
     let notiCustomer = this.props.notiCustomer.bind(this);
     let entries = this.props.queues ? _.map(this.props.queues, (queue, index) => {
       return (
-        <div className="ui-state-default" key={index} id={`queueId=${queue.id}`} style={{background: 'white'}}>
-          <CustomerListEntry queue={queue} notiCustomer={notiCustomer} showModal={this.showModal.bind(this)}/>
+        <div className="ui-state-default" key={index} id={`queueId=${queue.id}`} style={{background: 'white', width: '100%'}}>
+          <CustomerListEntry showOrders={this.showOrders.bind(this)} queue={queue} notiCustomer={notiCustomer} showModal={this.showModal.bind(this)}/>
         </div>
       );
     }) : <div>Nobody In Queue</div>;
@@ -62,7 +79,7 @@ class CustomerList extends React.Component {
           <h3 className="customer-list-head col-md-8">Customers in Queue</h3>
           <AddToQueue className="col-md-4" addCustomer={this.props.addCustomer.bind(this)}/>
         </div>
-        <div className="panel panel-default" id="sortable" style={{border: 'none'}}>
+        <div className="panel panel-default" id="sortable" style={{border: 'none', width: '100%'}}>
           {entries}
         </div>
 
@@ -86,6 +103,10 @@ class CustomerList extends React.Component {
             </div>
           </div>
           : []
+        }
+
+        { this.state.modalOrders &&
+          <OrdersModal modalOrders={this.state.modalOrders}/>
         }
       </div>
     );

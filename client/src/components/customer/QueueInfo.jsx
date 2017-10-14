@@ -54,7 +54,7 @@ class QueueInfo extends React.Component {
         method: 'GET',
         url: `/queues?queueId=${id}`,
         success: (data) => {
-          console.log('successfully grabbed queue data for customer', data);
+          // console.log('successfully grabbed queue data for customer', data);
           this.setState({ currentCustomer: data });
           // report queueId to server socket
           this.socket.emit('customer report', id);
@@ -78,7 +78,7 @@ class QueueInfo extends React.Component {
         });
       },
       error: (err) => {
-        console.log(err);
+        // console.log(err);
       }
     });
   }
@@ -113,7 +113,6 @@ class QueueInfo extends React.Component {
       url: `/menu/order/${this.state.currentCustomer.queueId}`,
       method: 'GET',
       success: (orders) => {
-        console.log('orders', orders);
         this.setState({
           modalOrdered: orders
         }, () => {
