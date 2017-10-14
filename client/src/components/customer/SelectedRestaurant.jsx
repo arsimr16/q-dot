@@ -23,8 +23,8 @@ class SelectedRestaurant extends React.Component {
   }
 
   getRestaurant() {
-    let windowUrl = window.location.href;
-    let id = windowUrl.slice(-1);
+    let path = window.location.pathname.split('/');
+    let id = Number(path[path.length - 1]); 
 
     $.ajax({
       method: 'GET',
