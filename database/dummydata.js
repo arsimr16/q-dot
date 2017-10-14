@@ -164,6 +164,7 @@ const dropDB = () => {
       .then(() => addCustomer())
       .then(() => addRewardQueues())
       .then(() => db.Reward.sync({force: true}))
+      .then(() => console.log('Done syncing dummy data'))
       .catch(err => {
         console.log('error syncing dummy data', err);
       })
