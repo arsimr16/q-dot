@@ -98,6 +98,21 @@ app.get('/restaurants', (req, res) => {
   }
 });
 
+app.put('*/image', (req, res) => {
+  if (req.query.restaurantId) {
+    dbQuery.updateRestaurantImage(req.query.link, req.query.restaurantId)
+      .then(() => {
+        res.send(201);
+      })
+      .catch(err => {
+        console.log('error updating restaurant image', err);
+        res.sendStatus(400);
+      })
+  } else {
+    res.sendStatus(400);
+  }
+})
+
 app.get('*/menu/order/:queueId', (req, res) => {
   dbQueueMenu.getMenuForQueue(req.params.queueId)
     .then((results) => {

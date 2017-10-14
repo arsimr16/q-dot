@@ -56,7 +56,6 @@ class CustomerList extends React.Component {
   }
 
   componentDidUpdate() {
-        console.log(this.props.queues);
     if (this.state.newQueue) {
       this.props.updateQueue(this.state.newQueue);
     }

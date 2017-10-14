@@ -45,6 +45,10 @@ const updateRestaurantStatus = (info) => {
   return db.Restaurant.update({status: info.status}, {where: {id: info.restaurantId}});
 };
 
+const updateRestaurantImage = (link, restaurantId) => {
+  return db.Restaurant.update({ image: link }, { where: { id: restaurantId } });
+};
+
 // find/add customer to database
 const findOrAddCustomer = (params) => {
   const mobile = helpers.phoneNumberFormatter(params.mobile);
@@ -234,5 +238,6 @@ module.exports = {
   findLoggedCustomer,
   getCustomerQueueHistory,
   getCustomerRewardInfo,
-  addRewardData
+  addRewardData,
+  updateRestaurantImage
 };

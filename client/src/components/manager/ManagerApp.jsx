@@ -6,6 +6,7 @@ import Nav from './Nav.jsx';
 import ManagerAudit from './ManagerAudit.jsx';
 import MenuList from './MenuList.jsx';
 import AnnouncementManager from './AnnouncementManager.jsx';
+import ImageModal from './Modals/ImageModal.jsx';
 import $ from 'jquery';
 import io from 'socket.io-client';
 
@@ -33,14 +34,33 @@ class ManagerApp extends React.Component {
   componentDidMount() {
     this.getMenu();
     this.reloadData();
+    $('.updateImage').hide();
+    $('.jumbotron-billboard').hover(() => {
+      $('.updateImage').fadeIn();
+    }, () => {
+      $('.updateImage').fadeOut();
+    });
+  }
+
+  updateImage(link) {
+    $.ajax({
+      url: `image?link=${link}&restaurantId=${this.state.restaurantId}`,
+      method: 'PUT',
+      success: (data) => {
+        this.reloadData();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   switchStatus() {
     $.ajax({
-      url: '/restaurants?restaurantId=1&status=' + (this.state.restaurantInfo.status === 'Open' ? 'Closed' : 'Open'),
+      url: '/restaurants?restaurantId=' + this.state.restaurantId + '&status=' + (this.state.restaurantInfo.status === 'Open' ? 'Closed' : 'Open'),
       method: 'PATCH',
       success: (data) => {
-        console.log(data);
+        // console.log(data);
         this.reloadData();
       },
       error: (err) => {
@@ -64,7 +84,7 @@ class ManagerApp extends React.Component {
       data: JSON.stringify(customer),
       contentType: 'application/json',
       success: (data) => {
-        console.log('this was a successful post request', data);
+        // console.log('this was a successful post request', data);
         this.reloadData();
       },
       failure: (error) => {
@@ -91,7 +111,7 @@ class ManagerApp extends React.Component {
     $.ajax({
       url: `/restaurants?restaurantId=${this.state.restaurantId}`,
       success: (data) => {
-        console.log(data);
+        // console.log(data);
         this.setState(
           {
             restaurantInfo: data,
@@ -156,6 +176,7 @@ class ManagerApp extends React.Component {
       <div>
         <Nav status={this.state.restaurantInfo.status} switchStatus={this.switchStatus.bind(this)}/>
         <div className="jumbotron text-center jumbotron-billboard">
+          <button className="updateImage" data-toggle="modal" data-target="#change-image">Update Image</button>
           <h1 id="grand-title">{this.state.restaurantInfo.name || 'Restaurant Name'}</h1>
         </div>
         <div className="container">
@@ -174,6 +195,8 @@ class ManagerApp extends React.Component {
             </div>
           </div>
         </div>
+
+        <ImageModal updateImage={this.updateImage.bind(this)}/>
       </div>
     );
   }
