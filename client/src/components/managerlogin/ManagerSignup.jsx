@@ -49,6 +49,7 @@ class ManagerSignup extends React.Component {
       method: 'POST',
       success: (data) => {
         console.log('result from submitHandler request: ', data);
+        window.location.href = data;
       },
       failure: (err) => {
         console.log('failed to sign up', err);

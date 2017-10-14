@@ -25,33 +25,27 @@ const addManager = function(username, passwordHash, passwordSalt, restaurant, lo
     if (result) {
       return result;
     } else {
-      return yelp.get(req, res, {term: restaurant, location: location, limit: 1})
-    }
-  })
-    .then((restaurant) => {
-      console.log('response from yelp: ', restaurant);
-      if (restaurant) {
+      yelp.get(req, res, {term: restaurant, location: location, limit: 1}, (restaurant) => {
+        console.log('response from yelp: ', restaurant);
         db.Manager.findOrCreate({
           where: {
             username: username,
             passwordHash: passwordHash,
             passwordSalt: passwordSalt,
-            restaurantId: restaurant.id
+            restaurantId: restaurant[0].id
           }
         })
-      } else {
-        return null;
-      }
-    })
-    .then(result => {
-      if(result !== null) {
-      cb(result);
-
-      }
-    })
-    .catch(err => {
-      console.log('error adding manager', err);
-    });
+        .then(result => {
+          if(result !== null) {
+            cb(result);
+          }
+        })
+        .catch(err => {
+          console.log('error adding manager', err);
+        });
+      })
+    }
+  })
 };
 
 const addCustomer = (username, passwordHash, passwordSalt, cb) => {

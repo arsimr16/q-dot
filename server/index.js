@@ -409,23 +409,14 @@ app.post('/manager', (req, res) => {
   //console.log('request', req.query);
   // if (req.user) {
     //console.log('inside POST req to /manager');
+    //yelp.get(req, res, {term: restaurant, location: location, limit: 1})
     if (!req.query.password || !req.query.username || !req.query.restaurant || !req.query.location) {
       res.sendStatus(400);
     } else {
       var passwordInfo = dbManagerQuery.genPassword(req.query.password, dbManagerQuery.genSalt());
       dbManagerQuery.addManager(req.query.username, passwordInfo.passwordHash, passwordInfo.salt, req.query.restaurant, req.query.location, req, res, (results) => {
         //console.log('inside POST req to /manager; result from manager controller: ', results);
-        if (results) {
-          res.send(results)
-        } else {
-          var params = {
-            term: req.query.restaurant,
-            location: req.query.location,
-            limit: 1
-          };
-          //console.log('calling yelp helper fn with: ', params);
-          // yelp.get(req, res, params);
-        }
+        res.send('/managerlogin');
       });
     }
   // } else {
@@ -458,7 +449,7 @@ app.post('/customer', (req, res) => {
 //add route to manager/:restaurant
 // on successful login/signup, redirect to manager/:restaurant
 
-//returns up to 10 suggested restaurant objects based on term and location
+//returns restaurant object based on term and location
 app.get('/yelp', (req, res) => {
   console.log('inside /yelp');
   var params = {
@@ -466,7 +457,8 @@ app.get('/yelp', (req, res) => {
     location: req.query.location,
     limit: 1
   };
-  yelp.get(req, res, params);
+  yelp.get(req, res, params, () => {});
+  //res.send('');
 });
 
 //returns manager login/logout history

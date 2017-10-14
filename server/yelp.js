@@ -4,7 +4,7 @@ const request = require('request');
 const express = require('express');
 
 const yelp = {
-	get: (req, res, params) => {
+	get: (req, res, params, callback) => {
 	 	const options = {
 			url: 'https://api.yelp.com/v3/businesses/search?',
 			headers: {
@@ -32,7 +32,14 @@ const yelp = {
 						longitude: body.coordinates.longitude
 					}
 				})
-				res.send('successfully added new restaurant');
+				//res.send('successfully added new restaurant');
+				.then((result) => {
+					if (req.route.path === '/yelp') {
+						res.send('success');
+					} else {
+						callback(result);
+					}
+				})
 			}
 		};
 		
