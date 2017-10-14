@@ -80,7 +80,7 @@ class CustomerNav extends React.Component {
               </div>
               <div className="modal-body">
                 { !this.state.rewards
-                  ? <h2>No rewards availabe, bruh!</h2>
+                  ? <h2>No rewards available, bruh!</h2>
                   : <table id="reward-table" className="bordered responsive-table centered">
                     <thead>
                       <tr>
