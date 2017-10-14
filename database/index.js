@@ -162,6 +162,14 @@ const Menu = db.define('menu', {
   }
 });
 
+const QueueMenu = db.define('queuemenu', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  }
+});
+
 // Relationship between Restaurant & Queue
 Restaurant.hasMany(Queue);
 Queue.belongsTo(Restaurant);
@@ -186,13 +194,17 @@ Announcement.belongsTo(Restaurant);
 Restaurant.hasMany(Menu);
 Menu.belongsTo(Restaurant);
 
-// Relationship between Cutomer and login credentials
+// Relationship between Customer & login credentials
 Manager.hasOne(Customer);
 Customer.belongsTo(Manager);
 
-// Relationship between Cutomer and login credentials
+// Relationship between Customer & login credentials
 Manager.hasOne(Reward);
 Reward.belongsTo(Manager);
+
+// Relationship between Queue & Menu
+Queue.belongsToMany(Menu, {through: QueueMenu, foreignKey: 'queueId', constraints: false});
+Menu.belongsToMany(Queue, {through: QueueMenu, foreignKey: 'menuId', constraints: false});
 
 Restaurant.sync()
   .then(() => Manager.sync())
@@ -201,6 +213,7 @@ Restaurant.sync()
   .then(() => Queue.sync())
   .then(() => Announcement.sync())
   .then(() => Menu.sync())
+  .then(() => QueueMenu.sync())
   .then(() => Reward.sync())
   .catch(error => console.log('error syncing data', error));
 
@@ -214,5 +227,6 @@ module.exports = {
   ManagerAudit,
   Announcement,
   Menu,
-  Reward
+  Reward,
+  QueueMenu
 };

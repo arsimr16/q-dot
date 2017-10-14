@@ -8,6 +8,7 @@ const db = require('../database/index.js');
 const dbQuery = require('../controller/index.js');
 const dbManagerQuery = require('../controller/manager.js');
 const dbMenuQuery = require('../controller/menu.js');
+const dbQueueMenu = require('../controller/queue_menu.js');
 const dummyData = require('../database/dummydata.js');
 const helpers = require('../helpers/helpers.js');
 const bodyParser = require('body-parser');
@@ -97,6 +98,28 @@ app.get('/restaurants', (req, res) => {
   }
 });
 
+app.post('*/menu/order/:queueId/:menuId', (req, res) => {
+  dbQueueMenu.addMenuForQueue(req.params.queueId, req.params.menuId)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch(err => {
+      console.log('Error adding queue/menu relationship', err);
+    })
+  // res.send('hi');
+});
+
+app.delete('*/menu/order/:queueId', (req, res) => {
+  let menuId = req.query ? req.query.menuId : null;
+  dbQueueMenu.removeItems(req.params.queueId, menuId)
+    .then((results) => {
+      res.send(results);
+    })
+    .catch(err => {
+      console.log('Error adding queue/menu relationship', err);
+    })
+  // res.send('hi');
+});
 
 app.get('*/menu/:restaurantId', (req, res) => {
   dbMenuQuery.getMenuForRestaurant(req.params.restaurantId)

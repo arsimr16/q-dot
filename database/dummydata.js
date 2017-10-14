@@ -1,6 +1,7 @@
 const db = require('./index.js');
 const dbQuery = require('../controller/index.js');
 const request = require('request');
+const dbQueueMenu = require('../controller/queue_menu.js');
 
 const addToQueue = () => {
   return dbQuery.addToQueue({name: 'Tiffany', restaurantId: 1, size: 2, mobile: '4158475697'})
@@ -33,6 +34,14 @@ const addRestaurants = (cb) => {
     })
   })
 };
+
+const addOrders = () => {
+  return dbQueueMenu.addMenuForQueue(1, 2)
+    .then(() => dbQueueMenu.addMenuForQueue(2, 1))
+    .catch(err => {
+      console.log('error adding dummy data to orders')
+    });
+}
 
 const addRestaurant = (location, term, cb) => {
   options = {
@@ -144,12 +153,17 @@ const dropDB = () => {
       .then(() => addManager())
       .then(() => db.ManagerAudit.sync({force: true}))
       .then(() => db.Customer.sync({force: true}))
+      .then(() => db.Menu.sync({force:true}))
       .then(() => db.Queue.sync({force: true}))
       .then(() => addToQueue())
+      .then(() => db.QueueMenu.sync({force: true}))
+      .then(() => addOrders())
       .then(() => db.Announcement.sync({force: true}))
       .then(() => addAnnouncements())
-      .then(() => db.Menu.sync({force:true}))
       .then(() => addMenus())
+      .then(() => addCustomer())
+      .then(() => addRewardQueues())
+      .then(() => db.Reward.sync({force: true}))
       .catch(err => {
         console.log('error syncing dummy data', err);
       })
