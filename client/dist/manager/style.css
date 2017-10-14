@@ -31,6 +31,9 @@ body {
   margin-top: 0;
   height: 400px;
   background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+  background-size: cover;
+  background-position: center;
 }
 
 #grand-title {

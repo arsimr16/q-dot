@@ -1,6 +1,7 @@
 import React from 'react';
 import CustomerNav from './CustomerNav.jsx';
 import CustomerBanner from './CustomerBanner.jsx';
+import MenuModal from './Modals/MenuModal.jsx';
 import $ from 'jquery';
 import io from 'socket.io-client';
 
@@ -76,6 +77,7 @@ class QueueInfo extends React.Component {
               <h6>your approximate wait time is:</h6>
               <span className="wait-time-indicator">{this.state.currentCustomer.wait}</span>
               <p className="groups-in-front-indicator">There are currently {this.state.currentCustomer.queueInFrontCount} groups in front of you</p>
+              <button></button>
             </div>
         }
       </div>

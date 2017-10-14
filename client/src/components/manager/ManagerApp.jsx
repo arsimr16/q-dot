@@ -91,6 +91,7 @@ class ManagerApp extends React.Component {
     $.ajax({
       url: `/restaurants?restaurantId=${this.state.restaurantId}`,
       success: (data) => {
+        console.log(data);
         this.setState(
           {
             restaurantInfo: data,
@@ -98,8 +99,8 @@ class ManagerApp extends React.Component {
           });
         // report restaurantId to server socket
         this.socket.emit('manager report', this.state.restaurantInfo.id);
-        let imageURL = `url(/${data.image})`;
-        $('.jumbotron-billboard').css('background', imageURL);
+        let imageURL = `url(${this.state.restaurantInfo.image})`;
+        $('.jumbotron-billboard').css('background-image', imageURL);
       },
       error: (err) => {
         console.log(err);
