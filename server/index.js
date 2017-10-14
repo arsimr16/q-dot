@@ -565,6 +565,10 @@ app.get('/rewards', (req, res) => {
   }
 });
 
+app.get('/customerinfo', (req, res) => {
+  dbQuery.
+});
+
 app.get('*', (req, res) => {
   if (req.session.queueInfo) {
     res.redirect(`/customer/queueinfo?queueId=${req.session.queueInfo.queueId}`);
