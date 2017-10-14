@@ -67,11 +67,19 @@ class SelectedRestaurant extends React.Component {
   submitCustomerInfo() {
     console.log(this.state.currentRestaurant.id);
     $.ajax({
-      method: 'GET',
-      url: `/customerinfo?restaurantId=${this.state.currentRestaurant.id}`,
-      success: data => {
-        console.log(data);
-        return;
+      method: 'POST',
+      url: '/queues',
+      data: {
+        restaurantId: this.state.currentRestaurant.id,
+        size: 2
+      },
+      success: (data) => {
+        console.log('this was a successful post request', data);
+        this.customerInfoSubmitted(data.queueId, data.position);
+        window.location.replace(`/customer/queueinfo?queueId=${data.queueId}`);
+      },
+      failure: (error) => {
+        console.log('something went wrong with the post request', error);
       }
     });
     //   contentType: 'application/json',

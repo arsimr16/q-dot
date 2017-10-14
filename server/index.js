@@ -299,41 +299,54 @@ app.post('/dummyqueues', (req, res) => {
 
 //add a customer to the queue at a restaurant
 app.post('/queues', (req, res) => {
-  if (!req.body.name || !req.body.mobile || !req.body.restaurantId
-      || !req.body.size) {
-    res.status(400).send('Bad Request');
+  if (!req.user) {
+    if (!req.body.name || !req.body.mobile || !req.body.restaurantId
+        || !req.body.size) {
+      res.status(400).send('Bad Request');
+    }
   } else {
-    dbQuery.addToQueue(req.body)
-      .then(response => {
-        const result = {
-          name: helpers.nameFormatter(req.body.name),
-          mobile: helpers.phoneNumberFormatter(req.body.mobile)
-        };
+    req.body.managerId = req.session.passport.user;
+  }
+  dbQuery.addToQueue(req.body)
+    .then(response => {
+      let result = {};
+      if (req.user) {
+        dbQuery.findLoggedCustomer(req.session.passport.user)
+          .then(customer => {
+            result.name = customer.name;
+            result.mobile = customer.mobile;
+            result.email = customer.email;
+          });
+      } else {
+        result.name = helpers.nameFormatter(req.body.name);
+        result.mobile = helpers.phoneNumberFormatter(req.body.mobile);
         if (req.body.email) {
           result.email = req.body.email;
         }
-        result.queueId = response.queueId;
-        result.size = response.size;
-        result.position = response.position;
-        result.queueInFrontCount = response.queueCount;
-        result.wait = response.wait;
-        result.queueInFrontList = response.queueList;
-        req.session.queueInfo = result;
-        res.send(result);
-        //automatically update manager side client
-        socketUpdateManager(req.body.restaurantId);
-      })
-      .catch(err => {
-        if (err.message.includes('closed')) {
-          res.send(err.message);
-        } else if (err.message.includes('added')) {
-          res.send(err.message);
-        } else {
-          console.log('error during post for queue', err);
-          res.status(418).send('Request Failed');
-        }
-      });
-  }
+      }
+      result.queueId = response.queueId;
+      result.size = response.size;
+      result.position = response.position;
+      result.queueInFrontCount = response.queueCount;
+      result.wait = response.wait;
+      result.queueInFrontList = response.queueList;
+      req.session.queueInfo = result;
+      console.log(result);
+      res.send(result);
+      //automatically update manager side client
+      socketUpdateManager(req.body.restaurantId);
+    })
+    .catch(err => {
+      console.error(err);
+      if (err.message.includes('closed')) {
+        res.send(err.message);
+      } else if (err.message.includes('added')) {
+        res.send(err.message);
+      } else {
+        console.log('error during post for queue', err);
+        res.status(418).send('Request Failed');
+      }
+    });
 });
 
 //update the status of a restaurant
@@ -563,10 +576,6 @@ app.get('/rewards', (req, res) => {
         res.send(rewardQueues);
       });
   }
-});
-
-app.get('/customerinfo', (req, res) => {
-  dbQuery.
 });
 
 app.get('*', (req, res) => {
