@@ -126,7 +126,7 @@ const Restaurant = db.define('restaurant', {
   },
   status: {
     type: Sequelize.STRING,
-    defaultValue: 'Closed'
+    defaultValue: 'Open'
   },
   image: Sequelize.STRING,
   rating: Sequelize.INTEGER,
