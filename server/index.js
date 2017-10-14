@@ -463,7 +463,8 @@ app.post('/customer', (req, res) => {
         email: req.query.email
       })
         .then((result) => {
-          res.send(result);
+          dbQuery.addRewardData(result.managerId)
+            .then(() => res.send(result));
         });
     });
   }

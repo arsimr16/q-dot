@@ -108,6 +108,14 @@ const addCustomer = () => {
   });
 };
 
+const addRewardData = () => {
+  return db.Reward.findOrCreate({
+    where: {
+      managerId: 2
+    }
+  });
+};
+
 const rewardQueueOptions = {
   size: 2,
   status: 'Seated',
@@ -164,6 +172,8 @@ const dropDB = () => {
       .then(() => addCustomer())
       .then(() => addRewardQueues())
       .then(() => db.Reward.sync({force: true}))
+      .then(() => addRewardData())
+      .then(() => console.log('Done syncing dummy data'))
       .catch(err => {
         console.log('error syncing dummy data', err);
       })

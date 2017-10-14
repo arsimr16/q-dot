@@ -79,6 +79,10 @@ const findOrAddCustomer = (params) => {
     });
 };
 
+const addRewardData = managerId => {
+  return db.Reward.create({ managerId: managerId });
+};
+
 const findLoggedCustomer = loggedId => {
   return db.Customer.findOne({where: {managerId: loggedId}});
 };
@@ -229,5 +233,6 @@ module.exports = {
   updateQueue,
   findLoggedCustomer,
   getCustomerQueueHistory,
-  getCustomerRewardInfo
+  getCustomerRewardInfo,
+  addRewardData
 };
