@@ -8,7 +8,7 @@ const CustomerMain = (props) => (
   <main>
     <Switch>
       <Route exact path={'/customer'} component={CustomerHome} user={props.user}/>
-      <Route path={'/restaurant'} component={SelectedRestaurant}/>
+      <Route path={'/restaurant'} component={SelectedRestaurant} user={props.user}/>
     </Switch>
   </main>
 )

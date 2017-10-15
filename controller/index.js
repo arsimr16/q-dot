@@ -51,9 +51,18 @@ const updateRestaurantImage = (link, restaurantId) => {
 
 // find/add customer to database
 const findOrAddCustomer = (params) => {
-  const mobile = helpers.phoneNumberFormatter(params.mobile);
-  const name = helpers.nameFormatter(params.name);
-  return db.Customer.findOne({where: {mobile: mobile}})
+  let queryParams = {};
+  let mobile;
+  let name;
+  if (params.managerId) {
+    queryParams.managerId = params.managerId;
+  }
+  if (params.mobile) {
+    mobile = helpers.phoneNumberFormatter(params.mobile);
+    name = helpers.nameFormatter(params.name);
+    queryParams.mobile = mobile;
+  }
+  return db.Customer.findOne({where: queryParams})
     .then(customer => {
       if (customer === null) {
         const customer = {
@@ -132,11 +141,12 @@ const addToQueue = (params) => {
     .then(customer => {
       queueInfo.customerId = customer.id;
       queueInfo.name = customer.name;
-      return db.Queue.findOne({where: {customerId: customer.id, restaurantId: params.restaurantId}});
+      return db.Queue.findOne({where: {customerId: customer.id,
+        status: 'Waiting'}});
     })
     .then(row => {
-      if (row !== null && row.status === 'Waiting') {
-        throw new Error('Already in queue!');
+      if (row !== null) {
+        return row;
       } else {
         return findInfoForOneRestaurant(params.restaurantId);
       }

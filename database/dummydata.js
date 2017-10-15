@@ -80,9 +80,19 @@ const addManager = () => {
     }
   })
     .then(() => {
-      return db.Manager.findOrCreate({
+      db.Manager.findOrCreate({
         where: {
           username: 'shane',
+          passwordHash: '71876a5030fa96e9b0b1adbcc2579d03c2817dabd835ed6e64caf77b5bb31db63e51f65b368f9ba0d4156674a6217fca6a5a3cda9973fb7e47d0aaf979f6efd1',
+          passwordSalt: 'dccfe760d41b6dcbb70ccd884c8df76b',
+          restaurantId: null
+        }
+      });
+    })
+    .then(() => {
+      return db.Manager.findOrCreate({
+        where: {
+          username: 'alex',
           passwordHash: '71876a5030fa96e9b0b1adbcc2579d03c2817dabd835ed6e64caf77b5bb31db63e51f65b368f9ba0d4156674a6217fca6a5a3cda9973fb7e47d0aaf979f6efd1',
           passwordSalt: 'dccfe760d41b6dcbb70ccd884c8df76b',
           restaurantId: null
@@ -98,28 +108,47 @@ const addAnnouncements = () => {
 };
 
 const addCustomer = () => {
-  return db.Customer.findOrCreate({
+  db.Customer.findOrCreate({
     where: {
       name: 'Shane Laymance',
       mobile: '(661) 703-2338',
       email: 'shane@gmail.com',
       managerId: 2
     }
-  });
+  })
+    .then(db.Customer.findOrCreate({
+      where: {
+        name: 'Alex Simrell',
+        mobile: '(573) 857-4726',
+        email: 'alex@gmail.com',
+        managerId: 3
+      }
+    }));
 };
 
 const addRewardData = () => {
-  return db.Reward.findOrCreate({
+  db.Reward.findOrCreate({
     where: {
       managerId: 2
     }
-  });
+  })
+    .then(db.Reward.findOrCreate({
+      where: {
+        managerId: 3
+      }
+    }));
 };
 
 const rewardQueueOptions = {
   size: 2,
   status: 'Seated',
   customerId: 5
+};
+
+const alexQueueOptions = {
+  size: 3,
+  status: 'Seated',
+  customerId: 6
 };
 
 const addRewardQueues = () => {
@@ -138,6 +167,11 @@ const addRewardQueues = () => {
     .then(() => db.Queue.create(rewardQueueOptions))
     .then(() => db.Queue.create(rewardQueueOptions))
     .then(() => db.Queue.create(rewardQueueOptions))
+    .then(() => db.Queue.create(alexQueueOptions))
+    .then(() => db.Queue.create(alexQueueOptions))
+    .then(() => db.Queue.create(alexQueueOptions))
+    .then(() => db.Queue.create(alexQueueOptions))
+    .then(() => db.Queue.create(alexQueueOptions))
     .then(() => db.Queue.create({
       size: 2,
       status: 'No Show',
@@ -158,25 +192,25 @@ const dropDB = () => {
     .then(() => db.Restaurant.sync({force: true}))
     .then(() => addRestaurants(() => {
       db.Manager.sync({force: true})
-      .then(() => addManager())
-      .then(() => db.ManagerAudit.sync({force: true}))
-      .then(() => db.Customer.sync({force: true}))
-      .then(() => db.Menu.sync({force:true}))
-      .then(() => db.Queue.sync({force: true}))
-      .then(() => addToQueue())
-      .then(() => db.QueueMenu.sync({force: true}))
-      .then(() => addOrders())
-      .then(() => db.Announcement.sync({force: true}))
-      .then(() => addAnnouncements())
-      .then(() => addMenus())
-      .then(() => addCustomer())
-      .then(() => addRewardQueues())
-      .then(() => db.Reward.sync({force: true}))
-      .then(() => addRewardData())
-      .then(() => console.log('Done syncing dummy data'))
-      .catch(err => {
-        console.log('error syncing dummy data', err);
-      })
+        .then(() => addManager())
+        .then(() => db.ManagerAudit.sync({force: true}))
+        .then(() => db.Customer.sync({force: true}))
+        .then(() => db.Menu.sync({force: true}))
+        .then(() => db.Queue.sync({force: true}))
+        .then(() => addToQueue())
+        .then(() => db.QueueMenu.sync({force: true}))
+        .then(() => addOrders())
+        .then(() => db.Announcement.sync({force: true}))
+        .then(() => addAnnouncements())
+        .then(() => addMenus())
+        .then(() => addCustomer())
+        .then(() => db.Reward.sync({force: true}))
+        .then(() => addRewardData())
+        .then(() => addRewardQueues())
+        .then(() => console.log('Done syncing dummy data'))
+        .catch(err => {
+          console.log('error syncing dummy data', err);
+        });
     }))
     .catch(err => {
       console.log('error syncing dummy data', err);
