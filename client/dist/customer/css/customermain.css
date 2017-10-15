@@ -6629,9 +6629,9 @@ textarea.materialize-textarea.validate + label:not(.label-icon).active {
 }
 
 [type="radio"]:not(:checked) + label:before,
-[type="radio"]:not(:checked) + label:after {
+/*[type="radio"]:not(:checked) + label:after {
   border: 2px solid #5a5a5a;
-}
+}*/
 
 [type="radio"]:not(:checked) + label:after {
   -webkit-transform: scale(0);
@@ -6650,9 +6650,9 @@ textarea.materialize-textarea.validate + label:not(.label-icon).active {
 }
 
 [type="radio"]:checked + label:after,
-[type="radio"].with-gap:checked + label:after {
+/*[type="radio"].with-gap:checked + label:after {
   background-color: #26a69a;
-}
+}*/
 
 [type="radio"]:checked + label:after {
   -webkit-transform: scale(1.02);
@@ -10103,3 +10103,4 @@ h1, h2, h3, h4, h5, .banner-title {
 #reward-table .material-icons {
   font-size: 60px;
 }
+

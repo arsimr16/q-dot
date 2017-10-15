@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SelectedRestaurant from './SelectedRestaurant.jsx';
+import StarRatingComponent from 'react-star-rating-component';
 
 // RestaurantCard is what the customers click on the home page to select their restaurant. Routes to /SelectedRestaurant
 class RestaurantCard extends React.Component {
@@ -26,6 +27,8 @@ class RestaurantCard extends React.Component {
 
     let image = this.props.restaurant.image;
 
+    // let rating = this.props.restaurant.rating
+
     return (
       <div className="restaurant-container col-xs-12">
         <div className="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
@@ -42,6 +45,16 @@ class RestaurantCard extends React.Component {
             </div>
             <div className="card-content">
               <span className="rating">rating: {this.props.restaurant.rating}</span>
+              <StarRatingComponent 
+                name={'rating'}
+                value={Math.round(this.props.restaurant.rating)}
+                starCount={5}
+                starColor='#ea9a00'
+                emptyStarColor='#d3d3d3'
+                editing={false}
+                renderStarIcon={() => <i className="fa fa-star fa-2x" aria-hidden="true"></i>}
+              />
+              
             </div>
             <div className="card-content">
               <span className="reviewCount">number of reviews: {this.props.restaurant.reviewCount}</span>
