@@ -77,7 +77,7 @@ class ManagerApp extends React.Component {
 
   addToQueue(customer) {
     console.log('here to add', customer);
-    customer.restaurantId = 1;
+    customer.restaurantId = this.state.restaurantId;
     $.ajax({
       method: 'POST',
       url: '/queues',

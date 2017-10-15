@@ -353,6 +353,7 @@ app.get('/queues', (req, res) => {
     var results = {};
     dbQuery.getCustomerInfo(req.query.queueId)
       .then(partialResults => {
+        results.customerId = partialResults.id;
         results.name = partialResults.customer.name;
         results.mobile = partialResults.customer.mobile;
         results.email = partialResults.customer.email;
@@ -366,6 +367,12 @@ app.get('/queues', (req, res) => {
       .then(partialResults => {
         results.queueInFrontCount = partialResults.count;
         results.queueInFrontList = partialResults.rows;
+        return dbQuery.getWaitTime(results.restaurant.id, results.customerId, results.position);
+      })
+      .then(waits => {
+        results.wait = results.wait + waits.reduce((tot, wait) => {
+          return tot + wait.wait;
+        }, 0);
         res.send(results);
       })
       .catch(err => {
