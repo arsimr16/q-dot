@@ -104,6 +104,19 @@ const getQueueInfo = (restaurantId, customerId, customerPosition) => {
   });
 };
 
+const getWaitTime = (restaurantId, customerId, customerPosition) => {
+  return db.Queue.findAll({
+    where: {
+      restaurantId: restaurantId,
+      position: {
+        $ne: null,
+        $lt: customerPosition
+      }
+    },
+    attributes: ['wait']
+  });
+}
+
 const updateQueue = (queueId, newPos) => {
   return db.Queue.update({position: newPos}, {where: {id: queueId}});
 }
@@ -239,5 +252,6 @@ module.exports = {
   getCustomerQueueHistory,
   getCustomerRewardInfo,
   addRewardData,
-  updateRestaurantImage
+  updateRestaurantImage,
+  getWaitTime
 };
