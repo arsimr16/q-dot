@@ -10,10 +10,10 @@ Customers are able to see their current position in line and total wait time, wh
 
 ## Team
 
-  - [Johnny Li](https://github.com/Pegaiur)
-  - [Tiffany Pham](https://github.com/tiffaphm)
-  - [Neha Chaudhary](https://github.com/nehacp)
-  - [Eugene Soo](https://github.com/eugenesoo)
+- [Alex Simrell](https://github.com/arsimr16 "Alex's Github")
+- [Marcus Polk](https://github.com/marcuspolk "Marcus's Github")
+- [Shane Laymance](https://github.com/slaymance "Shane's Github")
+- [Shwetha Patrachari](https://github.com/shwetachari "Shwetha's Github")
 
 ## Table of Contents
 
@@ -28,7 +28,7 @@ Customers are able to see their current position in line and total wait time, wh
 ## Getting Started
 
 ### Introduction
-q. comes with a customer-facing page, a queue information page and a manager-facing page/
+q. comes with a customer-facing page, a queue information page, and a manager-facing page/
 
 Manager facing page:
 
@@ -43,8 +43,6 @@ Default login information:
 |username    |johnny       |
 |password    |hunter2      |
 
-Currently, the manager page has been developed for a single restaurant.
-
 Customer facing page:
 
 ```
@@ -57,7 +55,19 @@ Queue information page:
 http://<server_url>/customer/queueinfo
 ```
 
-Visiting `http://<server_url>/` redirects you to either `/customer` or `/customer/queueinfo?queueId=[queueId]`, depending on whether a spot in queue has been reserved at a restaurant.
+Visiting `http://<server_url>/` or any invalid url redirects you to either `/customer` or `/customer/queueinfo?queueId=[queueId]`, depending on whether we detect on your browser that you have reserved a spot in a restaurant queue.
+
+## Running [Textbelt](https://github.com/typpo/textbelt) SMS Server
+```sh
+brew install redis
+redis-server /usr/local/etc/redis.conf
+brew install mutt
+cd textbelt
+npm install
+npm start
+```
+NOTE: The textbelt server does not use nodemon as of now due to port conflicts. ^C and run npm start every time you make a change to textbelt/server/app.js
+
 
 ### Deployment
 **How to deploy**
@@ -177,6 +187,20 @@ create database qdot;
 To add dummy data to the database, use postman or curl to make a POST request to `http://<server_url>/dummydata`
 
   Note: Post request for dummy data will delete all tables in the database and re-create them.
+
+
+**Running [Textbelt](https://github.com/typpo/textbelt) SMS Server**
+
+  ```sh
+  brew install redis
+  redis-server /usr/local/etc/redis.conf
+  brew install mutt
+  cd textbelt
+  npm install
+  npm start
+  ```
+  NOTE: The textbelt server does not use nodemon as of now due to port conflicts. ^C and run npm start every time you make a change to textbelt/server/app.js
+
 
 ### File Structure
 
@@ -299,17 +323,6 @@ To add dummy data to the database, use postman or curl to make a POST request to
 - react-router-dom 4.2.2
 
 ## Development
-
-## Running [Textbelt](https://github.com/typpo/textbelt) SMS Server
-```sh
-brew install redis
-redis-server /usr/local/etc/redis.conf
-brew install mutt
-cd textbelt
-npm install
-npm start
-```
-NOTE: The textbelt server does not use nodemon as of now due to port conflicts. ^C and run npm start every time you make a change to textbelt/server/app.js
 
 ### Installing Dependencies
 
