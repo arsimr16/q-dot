@@ -14,6 +14,10 @@ Customers are able to see their current position in line and total wait time, wh
   - [Tiffany Pham](https://github.com/tiffaphm)
   - [Neha Chaudhary](https://github.com/nehacp)
   - [Eugene Soo](https://github.com/eugenesoo)
+  - [Alex Simrell](https://github.com/arsimr16 "Alex's Github")
+  - [Marcus Polk](https://github.com/marcuspolk "Marcus's Github")
+  - [Shane Laymance](https://github.com/slaymance "Shane's Github")
+  - [Shwetha Patrachari](https://github.com/shwetachari "Shwetha's Github")
 
 ## Table of Contents
 
